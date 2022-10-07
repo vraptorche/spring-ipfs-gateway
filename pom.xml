@@ -9,6 +9,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <ipfs.client.version>v1.3.3</ipfs.client.version>
+      <kotlin.version>1.7.10</kotlin.version>
     </properties>
     <dependencies>
         <dependency>
@@ -26,6 +27,11 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
+      <dependency>
+        <groupId>org.jetbrains.kotlin</groupId>
+        <artifactId>kotlin-stdlib</artifactId>
+        <version>${kotlin.version}</version>
+      </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -59,9 +65,33 @@
                     <target>1.8</target>
                     <compilerArgs>
                         <arg>-Xlint:deprecation</arg>
-                        <arg>--enable-preview</arg> <!--only needed when using preview language features-->
+<!--                        <arg>&#45;&#45;enable-preview</arg> &lt;!&ndash;only needed when using preview language features&ndash;&gt;-->
                     </compilerArgs>
                 </configuration>
+            </plugin>
+            <plugin>
+              <groupId>org.jetbrains.kotlin</groupId>
+              <artifactId>kotlin-maven-plugin</artifactId>
+              <version>${kotlin.version}</version>
+              <executions>
+                <execution>
+                  <id>compile</id>
+                  <phase>process-sources</phase>
+                  <goals>
+                    <goal>compile</goal>
+                  </goals>
+                </execution>
+                <execution>
+                  <id>test-compile</id>
+                  <phase>test-compile</phase>
+                  <goals>
+                    <goal>test-compile</goal>
+                  </goals>
+                </execution>
+              </executions>
+              <configuration>
+                <jvmTarget>1.8</jvmTarget>
+              </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-source-plugin</artifactId>
@@ -76,6 +106,7 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <!-- explicitly define maven-deploy-plugin after other to force exec
                     order -->
@@ -98,10 +129,6 @@
         <repository>
             <id>jware-nexus</id>
             <url>https://nexus.jurassicware.com:8443/repository/jware-public/</url>
-        </repository>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
         </repository>
     </repositories>
 
